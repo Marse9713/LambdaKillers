@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MDM {
+public class MediansOfMedians {
 
     private static ArrayList<Integer> prepare (int d){
 
@@ -19,7 +19,7 @@ public class MDM {
 
     private static long execute(ArrayList<Integer> array, int d){
 
-        return MedianSelect(array, 0, array.size() - 1, d / 3);
+        return MedianSelect(array, 0, array.size() - 1, d / 2);
 
     }
 
@@ -83,7 +83,7 @@ public class MDM {
             }
             t1= System.currentTimeMillis();
         }
-        
+
         long max = rip;
         long min = rip / 2 ;
         int cicliErrati = 5 ;
@@ -152,7 +152,7 @@ public class MDM {
 
     public static void main(String[] args) throws IOException {
 
-        int c = 1;
+        int c = 5;
         double za = 2.32;
         double percent = 0.01;
         long tMin = (long) (Granularita() / percent);
@@ -162,61 +162,54 @@ public class MDM {
 
         double[] mis;
         double[] t = new double[1000];
-        
+
         for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
 
-            System.out.println(i);
             mis = misurate(i, c, za, tMin, DELTA);
             if (mis[0] < 1000) {
 
-                t[contatore] = mis[0];
+                t[contatore * 2] = mis[0];
+                t[(contatore * 2) + 1] = mis[1];
+
                 contatore++;
 
             }
         }
 
+        XSSFWorkbook workbook = new XSSFWorkbook();
 
-            XSSFWorkbook workbook = new XSSFWorkbook();
+        OutputStream os = new FileOutputStream("TempiMDM.xlsx");
 
-            OutputStream os = new FileOutputStream("TempiMDM.xlsx");
+        Sheet sheet = workbook.createSheet();
 
-            Sheet sheet = workbook.createSheet();
+        Row row = sheet.createRow(1);
+        Cell cell = row.createCell(1);
 
-            Row row = sheet.createRow(1);
-            Cell cell = row.createCell(1);
+        cell.setCellValue("n");
 
-            cell.setCellValue("n");
+        Cell cell1 = row.createCell(2);
+        cell1.setCellValue("Tempo");
 
-            Cell cell1 = row.createCell(2);
-            cell1.setCellValue("Tempo");
+        Cell cell2 = row.createCell(3);
+        cell2.setCellValue("Deviazione Standard");
 
-            Cell cell0 = row.createCell(3);
-            cell0.setCellValue("delta");
+        int cont = 0;
 
-            Cell cell01 = row.createCell(4);
-            cell01.setCellValue("sm");
+        for (int nn = 100; nn <= 6000000; nn = nn + ((nn * 10) / 100)) {
+            Row row1 = sheet.createRow(cont + 3);
+            Cell cell01 = row1.createCell(1);
+            cell01.setCellValue(nn);
 
-            int cont = 0;
+            Cell cell02 = row1.createCell(2);
+            cell02.setCellValue(t[cont]);
 
-            for (int nn = 100; nn <= 6000000; nn = nn + ((nn * 10) / 100)) {
-                Row row1 = sheet.createRow(cont + 3);
-                Cell cell2 = row1.createCell(1);
-                cell2.setCellValue(nn);
-
-                Cell cell3 = row1.createCell(2);
-                cell3.setCellValue(t[(cont * 3)]);
-
-                Cell cell4 = row1.createCell(3);
-                cell4.setCellValue(t[(cont * 3) + 2]);
-
-                Cell cell5 = row1.createCell(4);
-                cell5.setCellValue(t[(cont * 3) + 1]);
-                cont++;
-            }
-
-            workbook.write(os);
-
+            Cell cell03 = row1.createCell(3);
+            cell03.setCellValue(t[cont + 1]);
+            cont++;
         }
+
+        workbook.write(os);
+    }
 
     public static ArrayList creatore(int n)
     {
@@ -336,3 +329,4 @@ public class MDM {
     }
 
 }
+
