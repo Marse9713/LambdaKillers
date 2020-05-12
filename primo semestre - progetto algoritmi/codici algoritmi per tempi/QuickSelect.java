@@ -174,12 +174,13 @@ public class QuickSelect {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
 
-        OutputStream os = new FileOutputStream("TempiQS.xlsx");
+        OutputStream os = new FileOutputStream("TempiHS.xlsx");
 
         Sheet sheet = workbook.createSheet();
 
         Row row = sheet.createRow(1);
         Cell cell = row.createCell(1);
+
         cell.setCellValue("n");
 
         Cell cell1 = row.createCell(2);
@@ -191,22 +192,20 @@ public class QuickSelect {
         int cont = 0;
 
         for (int nn = 100; nn <= 6000000; nn = nn + ((nn * 10) / 100)) {
-
             Row row1 = sheet.createRow(cont + 3);
             Cell cell01 = row1.createCell(1);
             cell01.setCellValue(nn);
 
             Cell cell02 = row1.createCell(2);
-            cell02.setCellValue(t[cont]);
+            cell02.setCellValue(t[cont * 2]);
 
             Cell cell03 = row1.createCell(3);
-            cell03.setCellValue(t[cont + 1]);
+            cell03.setCellValue(t[(cont  * 2) + 1]);
             cont++;
         }
 
         workbook.write(os);
     }
-
 
     public static ArrayList creatore(int n)
     {
