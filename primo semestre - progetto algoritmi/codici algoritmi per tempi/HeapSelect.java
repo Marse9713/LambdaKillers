@@ -229,7 +229,7 @@ public class HeapSelect
         long min=rip/2;
         int failedCycles=5;
         while((max-min)>=failedCycles) {
-            rip= (max+min)/2; //medium value
+            rip= (max+min)/2;
             t0=System.currentTimeMillis() ;
             for(int i=0; i<=rip; i++) {
                 prepare(d);
