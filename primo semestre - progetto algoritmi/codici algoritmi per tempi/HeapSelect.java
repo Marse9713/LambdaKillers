@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TempoHeap
+public class HeapSelect
 {
 
     public static ArrayList<nodo> h1 = new ArrayList<>(0);
