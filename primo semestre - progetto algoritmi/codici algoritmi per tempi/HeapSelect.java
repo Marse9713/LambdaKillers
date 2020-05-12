@@ -293,8 +293,8 @@ public class HeapSelect
             execute(prepare(d), d);
         }
         t1 = System.currentTimeMillis();
-        double tLordo = t1 - t0;  //execution full time
-        double tMedio = (tLordo / ripLordo) - (tTara / ripTara); //execution medium time
+        double tLordo = t1 - t0;
+        double tMedio = (tLordo / ripLordo) - (tTara / ripTara);
         return tMedio;
     }
 
@@ -320,7 +320,7 @@ public class HeapSelect
         while(delta>DELTA);
         double[] result = new double[2];
         result[0] = e;
-        result[1] = delta;
+        result[1] = s;
         return result;
     }
 
@@ -337,12 +337,14 @@ public class HeapSelect
         double[] mis;
         double[] t = new double[1000];
 
-        for (int i = 100; i <= 110; i = i + ((i * 10) / 100)) {
+        for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
 
             mis = misurate(i, c, za, tMin, DELTA);
-            if (mis[0] < 100000) {
+            if (mis[0] < 1000) {
 
-                t[contatore] = mis[0];
+                t[contatore * 2] = mis[0];
+                t[(contatore * 2) + 1] = mis[1];
+
                 contatore++;
 
             }
@@ -362,15 +364,21 @@ public class HeapSelect
         Cell cell1 = row.createCell(2);
         cell1.setCellValue("Tempo");
 
+        Cell cell2 = row.createCell(3);
+        cell2.setCellValue("Deviazione Standard");
+
         int cont = 0;
 
-        for (int nn = 100; nn <= 110; nn = nn + ((nn * 10) / 100)) {
+        for (int nn = 100; nn <= 6000000; nn = nn + ((nn * 10) / 100)) {
             Row row1 = sheet.createRow(cont + 3);
-            Cell cell2 = row1.createCell(1);
-            cell2.setCellValue(nn);
+            Cell cell01 = row1.createCell(1);
+            cell01.setCellValue(nn);
 
-            Cell cell3 = row1.createCell(2);
-            cell3.setCellValue(t[(cont)]);
+            Cell cell02 = row1.createCell(2);
+            cell02.setCellValue(t[cont]);
+
+            Cell cell03 = row1.createCell(3);
+            cell03.setCellValue(t[cont + 1]);
             cont++;
         }
 
@@ -380,8 +388,8 @@ public class HeapSelect
     public static ArrayList creatore(int n)
     {
         Random random = new Random();
-        int limiteI = -100000000; 
-        int limiteS = 100000000; 
+        int limiteI = -100000000;
+        int limiteS = 100000000;
         int cicli = n;
         int y = limiteS - limiteI + 1;
 
