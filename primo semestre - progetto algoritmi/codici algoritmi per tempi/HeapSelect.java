@@ -375,10 +375,10 @@ public class HeapSelect
             cell01.setCellValue(nn);
 
             Cell cell02 = row1.createCell(2);
-            cell02.setCellValue(t[cont]);
+            cell02.setCellValue(t[cont * 2]);
 
             Cell cell03 = row1.createCell(3);
-            cell03.setCellValue(t[cont + 1]);
+            cell03.setCellValue(t[(cont  * 2) + 1]);
             cont++;
         }
 
