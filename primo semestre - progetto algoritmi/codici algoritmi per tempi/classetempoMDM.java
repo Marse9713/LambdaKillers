@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class classetempoMDM {
+public class MDM {
 
     private static ArrayList<Integer> prepare (int d){
 
@@ -83,7 +83,7 @@ public class classetempoMDM {
             }
             t1= System.currentTimeMillis();
         }
-        //exact research of repetition's number by bisection method approximated to 5 cycles.
+        
         long max = rip;
         long min = rip / 2 ;
         int cicliErrati = 5 ;
@@ -119,8 +119,8 @@ public class classetempoMDM {
             execute(prepare(d), d);
         }
         t1 = System.currentTimeMillis();
-        double tLordo = t1 - t0;  //execution full time
-        double tMedio = (tLordo / ripLordo) - (tTara / ripTara); //execution medium time
+        double tLordo = t1 - t0;
+        double tMedio = (tLordo / ripLordo) - (tTara / ripTara);
         return tMedio;
     }
 
@@ -159,109 +159,26 @@ public class classetempoMDM {
         double DELTA = 0.01;
 
         int contatore = 0;
-        int contatore1 = 0;
 
-        double[] mis; // riempimento con i risultati delle singole iterazioni
-        double[] mis2; //stesso ma del primo ciclo
+        double[] mis;
         double[] t = new double[1000];
-        double[] t2 = new double[1000];
-        double[] sum2 = new double[1000];
-        double[] sum22 = new double[1000];
+        
+        for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
 
-        for (int cm = 0; cm <= 1; cm++) {
+            System.out.println(i);
+            mis = misurate(i, c, za, tMin, DELTA);
+            if (mis[0] < 1000) {
 
-            if (cm == 0) {
+                t[contatore] = mis[0];
+                contatore++;
 
-                for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
-
-                    System.out.println(i);
-                    mis = misurate(i, c, za, tMin, DELTA);
-                    if (mis[0] < 1000) { // deve essere minore di 1 secondo
-
-                        t[contatore] = mis[0];
-                        contatore++;
-
-                    }
-
-                    System.out.println("i:\t" + i + "\te:\t" + mis[0]);
-                }
-            }
-
-            if(cm == 1) {
-
-                for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
-
-                    System.out.println(i + "\t2\t");
-                    mis2 = misurate(i, c, za, tMin, DELTA);
-                    if (mis2[0] < 1000) { // deve essere minore di 1 secondo
-
-                        t2[contatore1] = mis2[0];
-                        contatore1++;
-
-                    }
-
-                    System.out.println("i:\t" + i + "\te:\t" + mis2[0]);
-                }
             }
         }
-        System.out.println(t[0]);
-        System.out.println(t2[0]);
-        System.out.println(contatore);
-        conversionedati(t, t2, contatore);
-
-    }
-
-    public static void conversionedati(double[] t, double[] t2, int contatore) throws IOException {
-
-        double[] results = new double[1000];
-        double tm = 0;
-        double sum = 0;
-        double cn = 0;
-        double em = 0;
-        double sm;
-        double delta = 0;
-        double za = 2.32;
-        double m = 0;
-        double t0 = 0;
-        double t1 = 0;
-
-        for (int in = 0; in <= contatore; in++) {
-            for (int i = 1; i <= 2; i++) {
-                if (i == 1) {
-
-                    m = t[in];
-                    t0 = t[in];
-                    tm = tm + m;
-
-                } else {
-
-                    m = t2[in];
-                    t1 = t2[in];
-                    tm = tm + m;
-
-                }
-
-                sum = sum + (m * m);
-
-                tm = 0;
-                m = 0;
-
-            }
-
-            cn = 2;
-            em = (t0 + t1) / 2;
-            results[(in * 3)] = em;
-            sm = Math.sqrt((sum / 2 - (em * em)));
-            results[(in * 3) + 1] = sm;
-            delta = (1 / Math.sqrt(2)) * za * sm;
-            results[(in * 3) + 2] = delta;
-
-            // System.out.println("\te: \t" + em + "\tsum2: \t" + sum + "\tdelta: \t" + delta + "\tsm: \t" + sm);
 
 
             XSSFWorkbook workbook = new XSSFWorkbook();
 
-            OutputStream os = new FileOutputStream("Tempimdm10k.xlsx");
+            OutputStream os = new FileOutputStream("TempiMDM.xlsx");
 
             Sheet sheet = workbook.createSheet();
 
@@ -287,32 +204,31 @@ public class classetempoMDM {
                 cell2.setCellValue(nn);
 
                 Cell cell3 = row1.createCell(2);
-                cell3.setCellValue(results[(cont * 3)]);
+                cell3.setCellValue(t[(cont * 3)]);
 
                 Cell cell4 = row1.createCell(3);
-                cell4.setCellValue(results[(cont * 3) + 2]);
+                cell4.setCellValue(t[(cont * 3) + 2]);
 
                 Cell cell5 = row1.createCell(4);
-                cell5.setCellValue(results[(cont * 3) + 1]);
+                cell5.setCellValue(t[(cont * 3) + 1]);
                 cont++;
             }
 
             workbook.write(os);
 
         }
-    }
 
-    public static ArrayList creatore(int n) //crea l'array con tutti gli input forniti
+    public static ArrayList creatore(int n)
     {
         Random random = new Random();
-        int limiteI = -100000000; // numero più piccolo
-        int limiteS = 100000000; // numero più grande
+        int limiteI = -100000000;
+        int limiteS = 100000000;
         int cicli = n;
         int y = limiteS - limiteI + 1;
 
         ArrayList<Integer> array = new ArrayList<>();
 
-        for (int i = 0; i < cicli; i++) // quantita desiderata di numeri
+        for (int i = 0; i < cicli; i++)
         {
             int a = random.nextInt(y) + limiteI;
             array.add(a);
