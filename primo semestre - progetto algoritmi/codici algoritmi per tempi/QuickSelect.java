@@ -78,7 +78,7 @@ public class QuickSelect {
             }
             t1= System.currentTimeMillis();
         }
-        
+
         long max = rip;
         long min = rip / 2 ;
         int cicliErrati = 5 ;
@@ -114,7 +114,7 @@ public class QuickSelect {
             execute(prepare(d), d);
         }
         t1 = System.currentTimeMillis();
-        double tLordo = t1 - t0; 
+        double tLordo = t1 - t0;
         double tMedio = (tLordo / ripLordo) - (tTara / ripTara);
         return tMedio;
     }
@@ -142,13 +142,13 @@ public class QuickSelect {
         while(delta > DELTA);
         double[] result = new double[4];
         result[0] = e;
-        result[1] = sum2;
+        result[1] = s;
         return result;
     }
 
     public static void main(String[] args) throws IOException {
 
-        int c = 1;
+        int c = 5;
         double za = 2.32;
         double percent = 0.01;
         long tMin = (long) (Granularita() / percent);
@@ -159,12 +159,14 @@ public class QuickSelect {
         double[] mis;
         double[] t = new double[1000];
 
-        for (int i = 100; i <= 110; i = i + ((i * 10) / 100)) {
+        for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
 
             mis = misurate(i, c, za, tMin, DELTA);
-            if (mis[0] < 100000) {
+            if (mis[0] < 1000) {
 
-                t[contatore] = mis[0];
+                t[contatore * 2] = mis[0];
+                t[(contatore * 2) + 1] = mis[1];
+
                 contatore++;
 
             }
@@ -172,27 +174,33 @@ public class QuickSelect {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
 
-        OutputStream os = new FileOutputStream("TempiHS.xlsx");
+        OutputStream os = new FileOutputStream("TempiQS.xlsx");
 
         Sheet sheet = workbook.createSheet();
 
         Row row = sheet.createRow(1);
         Cell cell = row.createCell(1);
-
         cell.setCellValue("n");
 
         Cell cell1 = row.createCell(2);
         cell1.setCellValue("Tempo");
 
+        Cell cell2 = row.createCell(3);
+        cell2.setCellValue("Deviazione Standard");
+
         int cont = 0;
 
-        for (int nn = 100; nn <= 110; nn = nn + ((nn * 10) / 100)) {
-            Row row1 = sheet.createRow(cont + 3);
-            Cell cell2 = row1.createCell(1);
-            cell2.setCellValue(nn);
+        for (int nn = 100; nn <= 6000000; nn = nn + ((nn * 10) / 100)) {
 
-            Cell cell3 = row1.createCell(2);
-            cell3.setCellValue(t[(cont)]);
+            Row row1 = sheet.createRow(cont + 3);
+            Cell cell01 = row1.createCell(1);
+            cell01.setCellValue(nn);
+
+            Cell cell02 = row1.createCell(2);
+            cell02.setCellValue(t[cont]);
+
+            Cell cell03 = row1.createCell(3);
+            cell03.setCellValue(t[cont + 1]);
             cont++;
         }
 
@@ -254,7 +262,7 @@ public class QuickSelect {
 
         int indice = partition(array, inizio, fine);
 
-        if (k == indice) 
+        if (k == indice)
         {
             return array.get(Math.toIntExact(k));
         }
