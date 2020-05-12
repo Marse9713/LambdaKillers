@@ -1,6 +1,3 @@
-package programmi;
-
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -25,7 +22,6 @@ public class classetempoqs {
         return QuickSelect(array, 0, array.size() - 1, d / 2);
 
     }
-
 
     public static long Granularita(){
         long t0 = System.currentTimeMillis();
@@ -75,14 +71,14 @@ public class classetempoqs {
         long t1=0;
         long rip=1;
         while(t1-t0 <= tMin) {
-            rip = rip*2; //exponential growth
+            rip = rip*2;
             t0 = System.currentTimeMillis();
             for(int i = 0; i <= rip; i++) {
                 execute(prepare(d), d);
             }
             t1= System.currentTimeMillis();
         }
-        //exact research of repetition's number by bisection method approximated to 5 cycles.
+        
         long max = rip;
         long min = rip / 2 ;
         int cicliErrati = 5 ;
@@ -159,161 +155,76 @@ public class classetempoqs {
         double DELTA = 0.01;
 
         int contatore = 0;
-        int contatore1 = 0;
 
-        double[] mis; // riempimento con i risultati delle singole iterazioni
-        double[] mis2; //stesso ma del primo ciclo
+        double[] mis;
         double[] t = new double[1000];
-        double[] t2 = new double[1000];
-        double[] sum2 = new double[1000];
-        double[] sum22 = new double[1000];
+        
+        for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
 
-        for (int cm = 0; cm <= 1; cm++) {
+            System.out.println(i);
+            mis = misurate(i, c, za, tMin, DELTA);
+            if (mis[0] < 1000) {
 
-            if (cm == 0) {
+                t[contatore] = mis[0];
+                contatore++;
 
-                for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
-
-                    System.out.println(i);
-                    mis = misurate(i, c, za, tMin, DELTA);
-                    if (mis[0] < 1000) { // deve essere minore di 1 secondo
-
-                        t[contatore] = mis[0];
-                        contatore++;
-
-                    }
-
-                    System.out.println("i:\t" + i + "\te:\t" + mis[0]);
-                }
-            }
-
-            if(cm == 1) {
-
-                for (int i = 100; i <= 6000000; i = i + ((i * 10) / 100)) {
-
-                    System.out.println(i + "\t2\t");
-                    mis2 = misurate(i, c, za, tMin, DELTA);
-                    if (mis2[0] < 1000) { // deve essere minore di 1 secondo
-
-                        t2[contatore1] = mis2[0];
-                        contatore1++;
-
-                    }
-
-                    System.out.println("i:\t" + i + "\te:\t" + mis2[0]);
-                }
             }
         }
-        System.out.println(t[0]);
-        System.out.println(t2[0]);
-        System.out.println(contatore);
-        conversionedati(t, t2, contatore);
 
-    }
+        XSSFWorkbook workbook = new XSSFWorkbook();
 
-    public static void conversionedati(double[] t, double[] t2, int contatore) throws IOException {
+        OutputStream os = new FileOutputStream("TempiQS.xlsx");
 
-        double[] results = new double[1000];
-        double tm = 0;
-        double sum = 0;
-        double cn = 0;
-        double em = 0;
-        double sm;
-        double delta = 0;
-        double za = 2.32;
-        double m = 0;
-        double t0 = 0;
-        double t1 = 0;
+        Sheet sheet = workbook.createSheet();
 
-        for (int in = 0; in <= contatore; in++) {
-            for (int i = 1; i <= 2; i++) {
-                if (i == 1) {
+        Row row = sheet.createRow(1);
+        Cell cell = row.createCell(1);
 
-                    m = t[in];
-                    t0 = t[in];
-                    tm = tm + m;
+        cell.setCellValue("n");
 
-                } else {
+        Cell cell1 = row.createCell(2);
+        cell1.setCellValue("Tempo");
 
-                    m = t2[in];
-                    t1 = t2[in];
-                    tm = tm + m;
+        Cell cell0 = row.createCell(3);
+        cell0.setCellValue("delta");
 
-                }
+        Cell cell01 = row.createCell(4);
+        cell01.setCellValue("sm");
 
-                sum = sum + (m * m);
+        int cont = 0;
 
-                tm = 0;
-                m = 0;
+        for (int nn = 100; nn <= 6000000; nn = nn + ((nn * 10) / 100)) {
+            Row row1 = sheet.createRow(cont + 3);
+            Cell cell2 = row1.createCell(1);
+            cell2.setCellValue(nn);
 
-            }
+            Cell cell3 = row1.createCell(2);
+            cell3.setCellValue(t[(cont * 3)]);
 
-            cn = 2;
-            em = (t0 + t1) / 2;
-            results[(in * 3)] = em;
-            sm = Math.sqrt((sum / 2 - (em * em)));
-            results[(in * 3) + 1] = sm;
-            delta = (1 / Math.sqrt(2)) * za * sm;
-            results[(in * 3) + 2] = delta;
+            Cell cell4 = row1.createCell(3);
+            cell4.setCellValue(t[(cont * 3) + 2]);
 
-           // System.out.println("\te: \t" + em + "\tsum2: \t" + sum + "\tdelta: \t" + delta + "\tsm: \t" + sm);
-
-
-            XSSFWorkbook workbook = new XSSFWorkbook();
-
-            OutputStream os = new FileOutputStream("Tempiqs10k.xlsx");
-
-            Sheet sheet = workbook.createSheet();
-
-            Row row = sheet.createRow(1);
-            Cell cell = row.createCell(1);
-
-            cell.setCellValue("n");
-
-            Cell cell1 = row.createCell(2);
-            cell1.setCellValue("Tempo");
-
-            Cell cell0 = row.createCell(3);
-            cell0.setCellValue("delta");
-
-            Cell cell01 = row.createCell(4);
-            cell01.setCellValue("sm");
-
-            int cont = 0;
-
-            for (int nn = 100; nn <= 6000000; nn = nn + ((nn * 10) / 100)) {
-                Row row1 = sheet.createRow(cont + 3);
-                Cell cell2 = row1.createCell(1);
-                cell2.setCellValue(nn);
-
-                Cell cell3 = row1.createCell(2);
-                cell3.setCellValue(results[(cont * 3)]);
-
-                Cell cell4 = row1.createCell(3);
-                cell4.setCellValue(results[(cont * 3) + 2]);
-
-                Cell cell5 = row1.createCell(4);
-                cell5.setCellValue(results[(cont * 3) + 1]);
-                cont++;
-            }
-
-            workbook.write(os);
-
+            Cell cell5 = row1.createCell(4);
+            cell5.setCellValue(t[(cont * 3) + 1]);
+            cont++;
         }
+
+        workbook.write(os);
+        
     }
 
 
-    public static ArrayList creatore(int n) //crea l'array con tutti gli input forniti
+    public static ArrayList creatore(int n)
     {
         Random random = new Random();
-        int limiteI = -100000000; // numero più piccolo
-        int limiteS = 100000000; // numero più grande
+        int limiteI = -100000000;
+        int limiteS = 100000000;
         int cicli = n;
         int y = limiteS - limiteI + 1;
 
         ArrayList<Integer> array = new ArrayList<>();
 
-        for (int i = 0; i < cicli; i++) // quantita desiderata di numeri
+        for (int i = 0; i < cicli; i++)
         {
             int a = random.nextInt(y) + limiteI;
             array.add(a);
@@ -325,14 +236,14 @@ public class classetempoqs {
 
     public static ArrayList<Integer> e = new ArrayList<Integer>();
 
-    public static void scambia(ArrayList<Integer> array, int a, int b) // normale funzione di scambio
+    public static void scambia(ArrayList<Integer> array, int a, int b)
     {
         int a1 = array.get(a);
         array.set(Math.toIntExact(a), array.get(b));
         array.set(b, a1);
     }
 
-    public static int partition(ArrayList<Integer> array, int inizio, int fine) // classica funzione partition
+    public static int partition(ArrayList<Integer> array, int inizio, int fine)
     {
         int pivot = array.get(fine);
         int sindice = inizio;
@@ -350,14 +261,14 @@ public class classetempoqs {
 
     public static int QuickSelect(ArrayList<Integer> array, int inizio, int fine, int k)
     {
-        if (inizio == fine) // array con 1 elemento restituisce tale elemento
+        if (inizio == fine)
         {
             return array.get(inizio);
         }
 
         int indice = partition(array, inizio, fine);
 
-        if (k == indice) // cerca l'elemento in base al indice calcolato con partition
+        if (k == indice) 
         {
             return array.get(Math.toIntExact(k));
         }
