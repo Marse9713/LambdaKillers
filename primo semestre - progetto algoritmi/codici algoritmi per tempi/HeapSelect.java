@@ -136,7 +136,7 @@ public class HeapSelect
 
     public static long heapSelect(ArrayList<nodo> array, int k)
     {
-        // BuildMinHeap(array);
+        BuildMinHeap(array);
         ArrayList<nodo> h2 = new ArrayList<>();
         h2.add(new nodo(array.get(0).getKey(), array.get(0).getPos()));
 
@@ -250,14 +250,14 @@ public class HeapSelect
         long t1=0;
         long rip=1;
         while(t1-t0 <= tMin) {
-            rip = rip*2; //exponential growth
+            rip = rip*2;
             t0 = System.currentTimeMillis();
             for(int i = 0; i <= rip; i++) {
                 execute(prepare(d), d);
             }
             t1= System.currentTimeMillis();
         }
-        //exact research of repetition's number by bisection method approximated to 5 cycles.
+      
         long max = rip;
         long min = rip / 2 ;
         int cicliErrati = 5 ;
@@ -384,7 +384,7 @@ public class HeapSelect
 
         workbook.write(os);
     }
-
+    
     public static ArrayList creatore(int n)
     {
         Random random = new Random();
@@ -402,8 +402,7 @@ public class HeapSelect
             array.add(new nodo(a, posizione));
             posizione = posizione + 1;
         }
-
-        BuildMinHeap(array);
+        
         return array;
 
     }
