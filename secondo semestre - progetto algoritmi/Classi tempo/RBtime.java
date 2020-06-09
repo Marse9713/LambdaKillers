@@ -395,15 +395,15 @@ public class RBtime
             double[] sd = new double[10000];
             double[] mis;
             double DELTA=0.01;
-            for(int i = 100; i<=1000; i = i + ((i * 10) / 100)) {
+            for(int i = 100; i<=110; i = i + ((i * 10) / 100)) {
 
                 System.out.println(i);
                 mis = misurate(i, c, za, tMin, DELTA);
                 if (mis[0] < 1000) {
 
-                    sd[contatore * 3] = mis[contatore * 3]; //tempo
-                    sd[(contatore * 3) + 1] = mis[(contatore * 3) + 1]; //delta
-                    sd[(contatore * 3) + 2] = mis[(contatore * 3) + 2]; //s
+                    sd[contatore * 3] = mis[0]; //tempo
+                    sd[(contatore * 3) + 1] = mis[1]; //delta
+                    sd[(contatore * 3) + 2] = mis[2]; //s
                     contatore++;
 
                 }
@@ -436,7 +436,7 @@ public class RBtime
 
             int cont = 0;
 
-            for (int nn = 100; nn <= 1000; nn = nn + ((nn * 10) / 100)) {
+            for (int nn = 100; nn <= 110; nn = nn + ((nn * 10) / 100)) {
                 Row row1 = sheet.createRow(cont + 3); //numero elementi
                 Cell cell2 = row1.createCell(1);
                 cell2.setCellValue(nn);
