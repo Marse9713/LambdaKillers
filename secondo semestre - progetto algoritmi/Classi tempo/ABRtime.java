@@ -170,9 +170,9 @@ public class ABRtime
             mis = misurate(i, c, za, tMin, DELTA);
             if (mis[0] < 1000) {
 
-                sd[contatore * 3] = mis[contatore * 3]; //tempo
-                sd[(contatore * 3) + 1] = mis[(contatore * 3) + 1]; //delta
-                sd[(contatore * 3) + 2] = mis[(contatore * 3) + 2]; //s
+                sd[contatore * 3] = mis[0]; //tempo
+                sd[(contatore * 3) + 1] = mis[1]; //delta
+                sd[(contatore * 3) + 2] = mis[2]; //s
                 contatore++;
 
             }
