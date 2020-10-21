@@ -11,6 +11,9 @@ Ci saranno 2 sezioni(primo semestre/secondo semestre)
   
 -Seconda sezione:
   -uguale alla prima
+  
+-Terza sezione:
+  -ci sarà invece il laboratorio di basi di dati
 
 In piu' inserirei anche gli esercizi di algoritmi o create cartelle dove dovete mettere roba di universita'
 
